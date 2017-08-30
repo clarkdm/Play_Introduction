@@ -17,6 +17,10 @@ GET        /web                    controllers.Application.web(page: String ?="g
 
 GET        /helpers/*result        controllers.Application.helpers(result)
 
-GET        /Cookie        controllers.Application.cookies
+GET        /Cookie                 controllers.Application.cookies
+GET        /Cookie/D               controllers.Application.no_cookies
+GET        /Cookie/d               controllers.Application.no_cookies
 
 
+GET        /cd                     controllers.Application.listcd
+POST        /cd                     controllers.Application.addcd
