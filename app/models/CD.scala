@@ -1,7 +1,8 @@
-package controllers
+package models
 
-import play.api.data._
 import play.api.data.Forms._
+import play.api.data._
+
 import scala.collection.mutable.ArrayBuffer
 
 case class CD(name: String, price: Int)

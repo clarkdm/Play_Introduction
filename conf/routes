@@ -4,23 +4,51 @@
 
 # Home page
 #GET        /                       controllers.Application.index
-GET        /                       controllers.Application.index_Cookie(cookie: String ?="google")
+GET         /                       controllers.Application.index_Cookie(cookie: String ?="google")
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file           controllers.Assets.at(path="/public", file)
+GET         /assets/*file           controllers.Assets.at(path="/public", file)
 
 # redirect
-GET        /goo                    controllers.Application.goo
-GET        /web/*page              controllers.Application.web(page)
+GET         /goo                    controllers.Application.goo
+GET         /web/*page              controllers.Application.web(page)
 
-GET        /web                    controllers.Application.web(page: String ?="google")
+GET         /web                    controllers.Application.web(page: String ?="google")
 
-GET        /helpers/*result        controllers.Application.helpers(result)
+GET         /helpers/*result        controllers.Application.helpers(result)
 
-GET        /Cookie                 controllers.Application.cookies
-GET        /Cookie/D               controllers.Application.no_cookies
-GET        /Cookie/d               controllers.Application.no_cookies
+GET         /Cookie                 controllers.Application.cookies
+GET         /Cookie/D               controllers.Application.no_cookies
+GET         /Cookie/d               controllers.Application.no_cookies
+GET         /Cookie/R               controllers.Application.rename_cookies(name1: String ?="google", name2: String ?="google")
+GET         /Cookie/r               controllers.Application.rename_cookies(name1: String ?="google", name2: String ?="google")
 
 
-GET        /cd                     controllers.Application.listcd
+GET         /cd                     controllers.Application.listcd
 POST        /cd                     controllers.Application.addcd
+
+
+
+GET         /games                  controllers.ApplicationGame.games
+
+GET         /addtocart              controllers.ApplicationGame.addtocart(game: String)
+
+
+GET         /addgames               controllers.ApplicationGame.addGames
+POST        /addgames               controllers.ApplicationGame.addGamePost
+
+
+POST        /addUser                controllers.ApplicationGame.addUser
+GET         /register               controllers.ApplicationGame.register
+
+POST        /login                  controllers.ApplicationGame.login
+GET         /login                  controllers.ApplicationGame.login
+
+
+
+
+
+
+
+
+

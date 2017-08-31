@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-
+import models.CD
 import play.api._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -36,7 +36,6 @@ class Application @Inject()(val messagesApi: MessagesApi) extends Controller wit
       case _ => NotFound(views.html.status(result))
 
     }
-
   }
 
   def todo = TODO
@@ -47,7 +46,10 @@ class Application @Inject()(val messagesApi: MessagesApi) extends Controller wit
     Ok(views.html.status(request.cookies.get("test").head.value.toString()))
 
   }
+  def rename_cookies(name1: String , name2: String ) = Action { implicit request =>
 
+    Ok(views.html.status("hi")).withCookies(Cookie(name2,request.cookies.get(name1).head.value.toString() )).discardingCookies(DiscardingCookie(name1))
+  }
   def no_cookies = Action { implicit request =>
 
     Ok(views.html.status(request.cookies.get("test").head.value.toString())).discardingCookies(DiscardingCookie("test"))
