@@ -6,6 +6,7 @@
 
 @main("Add Games") {
     @helper.form(routes.ApplicationGame.addGamePost()) {
+        @helper.inputText(form("id"), '_label -> "ID", '_showConstranits -> false,'class -> "form-control")
         @helper.inputText(form("name"), '_label -> "Name", '_showConstranits -> false,'class -> "form-control")
         @helper.inputText(form("price"), '_label -> "Price", '_showConstraints -> false,'class -> "form-control")
         @helper.textarea(form("description"), '_label -> "Description", '_showConstraints -> false,'class -> "form-control")
