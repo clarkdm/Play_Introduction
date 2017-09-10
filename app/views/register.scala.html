@@ -1,0 +1,18 @@
+@(form: Form[User])(implicit messages: Messages)
+
+
+
+
+
+@main("register" +"MD5(\"1234\")") {
+    <script> alert('HI');</script>
+    @helper.form(routes.ApplicationGame.addUser) {
+        @helper.inputText(form("user_name"), '_label -> "User Name", '_showConstranits -> false,'class -> "form-control")
+        @helper.inputPassword(form("password"), '_label -> "Password", '_showConstraints -> false,'class -> "form-control")
+        @helper.inputText(form("name"), '_label -> "Name", '_showConstraints -> false,'class -> "form-control")
+
+            <button type="submit" class="btn btn-default">Crate Games</button>
+    }
+}
+
+
