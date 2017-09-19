@@ -1,0 +1,15 @@
+@main("Clock") {
+<h1>hi</h1>
+    <h2 id="clock"></h2>
+<br>
+
+    @*<script type="text/javascript" charset="utf-8">*@
+            @*var clockChanged = function (time) {*@
+                @*$('#clock').html(time.replace(/(\d)/g, '<spsn>$1<\/span > '))*@
+            @*}*@
+
+    @*</script>*@
+    <iframe id="comet" src="@routes.Application.clocklive()"></iframe>
+
+    <script src="/assets/javascripts/clock.js"></script>
+}

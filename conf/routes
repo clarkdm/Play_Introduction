@@ -51,6 +51,15 @@ GET         /createUser                  controllers.ApplicationGame.createUser
 GET         /findByUserName                  controllers.ApplicationGame.findByUserName(name: String ?="John")
 
 
+GET         /getpdf                 controllers.Application.getPDF
+GET         /getpdf2                 controllers.Application.getPDF_2
+GET         /getpdf3                 controllers.Application.getPDF_3
+
+
+GET         /clock                 controllers.Application.clock()
+GET         /clocklive                 controllers.Application.clocklive()
+
+
 
 
 

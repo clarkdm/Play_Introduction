@@ -135,7 +135,7 @@ class ApplicationGame @Inject()(val messagesApi: MessagesApi, val reactiveMongoA
 
     //Ok(views.html.GamesList(findByAllGames))
     var x: ListBuffer[Game] = ListBuffer()
-    
+
     Ok(views.html.GamesList(x.toList))
   }
 
@@ -194,12 +194,12 @@ class ApplicationGame @Inject()(val messagesApi: MessagesApi, val reactiveMongoA
 
     request.session.get("cart") == "hi"
     if (request.cookies.get("cart").isEmpty) {
-      Ok("hi").withCookies(Cookie("cart", game))
+//      Ok().withCookies(Cookie("cart", game))
     }
     else {
-      Ok("hicccc").withCookies(Cookie("cart", (request.cookies.get("cart").head.value + "###" + game)))
+//      Ok().withCookies(Cookie("cart", (request.cookies.get("cart").head.value + "###" + game)))
     }
-
+    Ok("hi")
   }
 
 }

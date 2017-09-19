@@ -2,12 +2,37 @@ package controllers
 
 import javax.inject.Inject
 
+import akka.stream.Materializer
+import akka.stream.scaladsl.{FileIO, Source}
+import akka.util.ByteString
 import models.CD
 import play.api._
+import play.api.http.HttpEntity
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.Comet
 import play.api.mvc._
+import java.io.{ByteArrayOutputStream, File}
+import javax.imageio.ImageIO
+import javax.inject.Inject
 
-class Application @Inject()(val messagesApi: MessagesApi) extends Controller with I18nSupport {
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64
+import models.CD
+import play.api.i18n.{I18nSupport, MessagesApi}
+import akka.stream.Materializer
+import play.api.http.ContentTypes
+import play.api.libs.Comet
+import play.api.mvc._
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+
+import akka.stream.scaladsl.Source
+import com.fasterxml.jackson.datatype.jsr310.deser.key.ZonedDateTimeKeyDeserializer
+import play.api.libs.json._
+
+import scala.concurrent.duration._
+import scala.language.postfixOps
+
+class Application @Inject()(val messagesApi: MessagesApi, val materializer: Materializer) extends Controller with I18nSupport {
 
   def index = Action { implicit request =>
     Ok(views.html.index("Your new application is ready."))
@@ -46,10 +71,12 @@ class Application @Inject()(val messagesApi: MessagesApi) extends Controller wit
     Ok(views.html.status(request.cookies.get("test").head.value.toString()))
 
   }
-  def rename_cookies(name1: String , name2: String ) = Action { implicit request =>
 
-    Ok(views.html.status("hi")).withCookies(Cookie(name2,request.cookies.get(name1).head.value.toString() )).discardingCookies(DiscardingCookie(name1))
+  def rename_cookies(name1: String, name2: String) = Action { implicit request =>
+
+    Ok(views.html.status("hi")).withCookies(Cookie(name2, request.cookies.get(name1).head.value.toString())).discardingCookies(DiscardingCookie(name1))
   }
+
   def no_cookies = Action { implicit request =>
 
     Ok(views.html.status(request.cookies.get("test").head.value.toString())).discardingCookies(DiscardingCookie("test"))
@@ -68,10 +95,51 @@ class Application @Inject()(val messagesApi: MessagesApi) extends Controller wit
       formWithErrors =>
         BadRequest(views.html.listCDs(CD.cds, formWithErrors))
     }, { cd =>
-      cd
       CD.cds.append(cd)
       Redirect(routes.Application.listcd())
     })
+  }
+
+  def getPDF = Action { implicit request =>
+    Result(
+      header = ResponseHeader(200, Map.empty),
+      body = HttpEntity.Strict(ByteString("Hello world"), Some("text/plain"))
+    )
+  }
+
+  def getPDF_2 = Action { implicit request =>
+
+    Ok.sendFile(content = new java.io.File("./public/test_1.pdf"), fileName = _ => "test_1.pdf")
+  }
+
+  def getPDF_3 = Action { implicit request =>
+    val file = new java.io.File("./public/test_2.pdf")
+    val path = file.toPath
+    val source = FileIO.fromPath(path)
+    Result(
+      header = ResponseHeader(200, Map.empty),
+      body = HttpEntity.Streamed(source, Some(file.length()), Some("application/pdf"))
+
+    )
+  }
+
+
+  def clock() = Action {
+    Ok(views.html.clock())
+  }
+
+  def clocklive() = Action { implicit request =>
+    println("hi")
+    Ok.chunked(stringSource via
+      Comet.string("parent.clockChanged")).as(ContentTypes.HTML)
+  }
+
+  def stringSource: Source[String, _] = {
+
+    val df: DateTimeFormatter = DateTimeFormatter.ofPattern("HH mm ss")
+    val tickSource = Source.tick(0 millis, 100 millis, "TICK")
+    val s = tickSource.map((tich) => df.format(ZonedDateTime.now()))
+    s
   }
 
 }
