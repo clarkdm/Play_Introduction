@@ -1,24 +1,17 @@
 package controllers
 
-import javax.inject.Inject
 
-import akka.stream.Materializer
-import akka.stream.scaladsl.{FileIO, Source}
+import akka.stream.scaladsl.FileIO
 import akka.util.ByteString
-import models.CD
-import play.api._
+
 import play.api.http.HttpEntity
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.Comet
-import play.api.mvc._
-import java.io.{ByteArrayOutputStream, File}
-import javax.imageio.ImageIO
+
 import javax.inject.Inject
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64
+
 import models.CD
 import play.api.i18n.{I18nSupport, MessagesApi}
-import akka.stream.Materializer
+
 import play.api.http.ContentTypes
 import play.api.libs.Comet
 import play.api.mvc._
@@ -26,13 +19,12 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 import akka.stream.scaladsl.Source
-import com.fasterxml.jackson.datatype.jsr310.deser.key.ZonedDateTimeKeyDeserializer
-import play.api.libs.json._
+
 
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-class Application @Inject()(val messagesApi: MessagesApi, val materializer: Materializer) extends Controller with I18nSupport {
+class Application @Inject()(val messagesApi: MessagesApi) extends Controller with I18nSupport {
 
   def index = Action { implicit request =>
     Ok(views.html.index("Your new application is ready."))

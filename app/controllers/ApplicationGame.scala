@@ -1,10 +1,10 @@
 package controllers
 
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Controller, Cookie}
+import play.api.mvc.{Action, AnyContent, Controller}
 import javax.inject.Inject
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent. Future
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json._
 import reactivemongo.api.Cursor
@@ -14,10 +14,9 @@ import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMo
 import reactivemongo.play.json._
 import collection._
 
-import scala.collection.JavaConverters._
+
 import scala.collection.mutable.ListBuffer
-import scala.concurrent.duration._
-import scala.util.{Failure, Success}
+
 
 class ApplicationGame @Inject()(val messagesApi: MessagesApi, val reactiveMongoApi: ReactiveMongoApi)
   extends Controller with I18nSupport with MongoController with ReactiveMongoComponents {
@@ -28,39 +27,29 @@ class ApplicationGame @Inject()(val messagesApi: MessagesApi, val reactiveMongoA
   def createUser = Action.async {
     val user = User("john", "jmith", "hi")
 
-    // insert the user
+
     val futureResult = collection.flatMap(_.insert(user))
 
-    // when the insert is performed, send a OK 200 result
     futureResult.map(_ => Ok)
   }
 
   def createGame(game: Game) = {
 
 
-    // insert the user
-    //    val futureResult = collection.flatMap(_.insert(Game(3,"Dragon Age",44,"hi")))
     val futureResult = collection.flatMap(_.insert(game))
 
-    // when the insert is performed, send a OK 200 result
 
   }
 
 
   def findByUserName(userName: String) = Action.async {
-    // let's do our query
     val cursor: Future[Cursor[User]] = collection.map {
-      // find all people with name `name`
-      //      _.find(Json.obj("userName" -> lastName)).
       _.find(Json.obj("userName" -> userName)).
-        // perform the query and get a cursor of JsObject
         cursor[User]
     }
     println(cursor)
-    // gather all the JsObjects in a list
     val futureUsersList: Future[List[User]] = cursor.flatMap(_.collect[List]())
 
-    // everything's ok! Let's reply with the array
     futureUsersList.map { persons =>
       Ok(persons.toString)
     }
@@ -95,8 +84,7 @@ class ApplicationGame @Inject()(val messagesApi: MessagesApi, val reactiveMongoA
 
   def games: Action[AnyContent] = Action.async { implicit request =>
     val cursor: Future[Cursor[Game]] = collection.map {
-      //_.find(Json.obj("lastName" -> "Lastname"))  // searching by a particular field
-      _.find(Json.obj())                            // getting averything from the collection
+      _.find(Json.obj())
         //.sort(Json.obj("id" -> -1))
         .cursor[Game]
     }
@@ -133,7 +121,6 @@ class ApplicationGame @Inject()(val messagesApi: MessagesApi, val reactiveMongoA
 
   def addGameToCart = Action { implicit request =>
 
-    //Ok(views.html.GamesList(findByAllGames))
     var x: ListBuffer[Game] = ListBuffer()
 
     Ok(views.html.GamesList(x.toList))
@@ -148,7 +135,6 @@ class ApplicationGame @Inject()(val messagesApi: MessagesApi, val reactiveMongoA
         BadRequest(views.html.AddGame(formWithErrors))
     }, { game =>
       createGame(game)
-      //Game.games.append(game)
       Redirect(routes.ApplicationGame.addGames)
     })
   }
@@ -168,7 +154,6 @@ class ApplicationGame @Inject()(val messagesApi: MessagesApi, val reactiveMongoA
         BadRequest(views.html.register(formWithErrors))
     }, { user =>
 
-      //User.users.append(user)
       Redirect(routes.ApplicationGame.register)
     })
   }
@@ -185,7 +170,6 @@ class ApplicationGame @Inject()(val messagesApi: MessagesApi, val reactiveMongoA
       if (login.user_name == "cd1" && login.password == "1234") {
         Redirect(routes.ApplicationGame.games).withSession("login" -> login.user_name)
       } else Redirect(routes.ApplicationGame.games).withSession("login" -> "")
-      //User.users.append(login)
 
     })
   }
