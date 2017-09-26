@@ -44,3 +44,6 @@ test-result
 server.pid
 *.eml
 /dist/
+*.pdf
+/public/test_2.pdf
+/public/test_1.pdf
